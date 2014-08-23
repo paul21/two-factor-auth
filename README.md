@@ -7,7 +7,7 @@ Librerías y archivos de configuración
 -------------------------------------
 
 * **[WhatsAPI](https://github.com/venomous0x/WhatsAPI)**  
-./application/config/whatsapp.php:
+./application/config/whatsapp.php:  
 `$username = '';` Número de teléfono con código de país sin '+' o '00'  
 `$identity = '';` Obtenido durante la registración utilizando esta API, [WART](https://github.com/shirioko/WART) o _sniffeada_ del teléfono utilizando [MissVenom](https://github.com/shirioko/MissVenom)  
 `$nickname = '';` Nombre de usuario frente a otros usuarios de WhatsApp  
