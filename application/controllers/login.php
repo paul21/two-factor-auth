@@ -78,7 +78,7 @@ class Login extends CI_Controller {
 
 				/* Envío del código al teléfono */
 
-				$mensaje = '«'.date('H:i:s').' Intento de login desde '.$this->ip.'»'."\n\nCódigo: ".$this->session->userdata('codigo');
+				$mensaje = '«'.date('H:i:s').' Intento de login desde '.$this->ip.'»'."\n\nCódigo: ".$datos['codigo'];
 				$result['message'] = $this->enviar($datos['telefono'], $mensaje);
 
 				/* Cargar la vista para ingresar el código */
