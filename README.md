@@ -2,6 +2,7 @@ Two-Factor Authentication
 =========================
 
 Implementación de un proceso de Login seguro mediante autenticación de doble factor vía **WhatsApp** para la cátedra _Comunicación de Redes Seguras (2060)_ de la Facultad de Ingeniería -- Universidad de Mendoza.
+<<<<<<< HEAD
 
 Librerías y archivos de configuración
 -------------------------------------
@@ -25,3 +26,5 @@ Enlace a la aplicación
 ----------------------
 
 https://twofactor.pablovalentini.com.ar/
+=======
+>>>>>>> 1b8c3605f23781bb368d70fe968c66e82fb2cfcd
