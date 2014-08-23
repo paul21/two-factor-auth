@@ -11,11 +11,11 @@ class Login extends CI_Controller {
 	var $interval = 120;    /* En segundos */
 	var $max_attemps = 2;   /* Intentos-1 permitidos antes de mostrar captcha */
 
-    function __construct()
-    {
-        parent::__construct();
-        $this->ip = $this->input->ip_address();
-    }
+	function __construct()
+	{
+		parent::__construct();
+		$this->ip = $this->input->ip_address();
+	}
 
 	public function index()
 	{
