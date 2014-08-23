@@ -61,7 +61,7 @@
 			echo form_submit('send', 'Login', 'class="btn btn-success"');
 			echo form_close();
 
-			/* Mostrar errores de validacion */
+			/* Mostrar errores de validación */
 
 			echo '<span style=color:orange>'.validation_errors().'</span>';
 			echo '<br />';

@@ -6,10 +6,10 @@ require_once('application/libraries/whatsapi/protocol.class.php');
 
 class Login extends CI_Controller {
 
-var $ip;
-var $view_options = array('captcha' => FALSE);
-var $interval = 120; /* En segundos */
-const ATTEMPS = 2;   /* Intentos+1 permitidos antes de mostrar captcha */
+	var $ip;
+	var $view_options = array('captcha' => FALSE);
+	var $interval = 120;    /* En segundos */
+	var $max_attemps = 2;   /* Intentos-1 permitidos antes de mostrar captcha */
 
     function __construct()
     {
@@ -27,7 +27,7 @@ const ATTEMPS = 2;   /* Intentos+1 permitidos antes de mostrar captcha */
 		{
 			/* Si la IP excede X numero de intentos muestra captcha*/
 
-			if($this->log->attemps($this->ip, $this->interval) > self::ATTEMPS)
+			if($this->log->attemps($this->ip, $this->interval) > $this->max_attemps)
 			{
 				$this->view_options['captcha'] = TRUE;
 			}
@@ -42,9 +42,9 @@ const ATTEMPS = 2;   /* Intentos+1 permitidos antes de mostrar captcha */
 		$this->form_validation->set_rules('user', 'username', 'required|trim|max_length[80]|xss_clean');
 		$this->form_validation->set_rules('pass', 'password', 'required|trim|max_length[80]|xss_clean');
 
-		/* Si la IP excede X numero de intentos en el intervalo definido, tambien valida captcha */
+		/* Si la IP excede X numero de intentos en el intervalo definido, también valida captcha */
 
-		if($this->log->attemps($this->ip, $this->interval) > self::ATTEMPS)
+		if($this->log->attemps($this->ip, $this->interval) > $this->max_attemps)
 		{
 			$this->form_validation->set_rules('recaptcha_response_field', 'captcha', 'required|callback_captcha');
 			$this->view_options['captcha'] = TRUE;
@@ -54,8 +54,8 @@ const ATTEMPS = 2;   /* Intentos+1 permitidos antes de mostrar captcha */
 		{
 			/* Validación de usuario */
 
-			$user = $this->input->post("user");
-			$pass = hash('sha512', $this->input->post("pass"));
+			$user = $this->input->post('user');
+			$pass = hash('sha512', $this->input->post('pass'));
 
 			$this->load->model('usuario');
 
@@ -65,28 +65,30 @@ const ATTEMPS = 2;   /* Intentos+1 permitidos antes de mostrar captcha */
 			{
 				foreach($result as $row);
 
-				/* Preparación de los datos de sesion y generación del codigo a enviar */
+				/* Preparación de los datos de sesión y generación del código a enviar */
 
 				$datos['usuario']  =  $row->IdUsuario;
 				$datos['telefono'] =  $row->Telefono;
 				$datos['intentos'] =  0;
 				$datos['codigo']   =  $this->generar();
 
-				/* Inciar la sesion */
+				/* Inciar la sesión */
 
 				$this->session->set_userdata($datos);
 
-				/* Envio del codigo al telefono */
+				/* Envío del código al teléfono */
 
-				$mensaje = '«'.date("H:i:s").' Intento de login desde '.$this->input->ip_address().'»'."\n\nCodigo: ".$datos['codigo'];
+				$mensaje = '«'.date('H:i:s').' Intento de login desde '.$this->ip.'»'."\n\nCódigo: ".$this->session->userdata('codigo');
 				$result['message'] = $this->enviar($datos['telefono'], $mensaje);
 
-				/* Cargar la vista para ingresar el codigo */
+				/* Cargar la vista para ingresar el código */
 				
 				$this->load->view('login_steptwo_view', $result);
 			}
 			else
 			{
+				/* Logueo el intento fallido */
+
 				$this->log->add(array('IpAddress' => $this->ip,
 					                  'Timestamp' => date('Y-m-d G:i:s')));
 
@@ -95,7 +97,7 @@ const ATTEMPS = 2;   /* Intentos+1 permitidos antes de mostrar captcha */
 			}
 		}
 	
-		/* Fallo la validación de formularios */
+		/* Falló la validación de formularios */
 
 		else 
 		{
@@ -115,20 +117,20 @@ const ATTEMPS = 2;   /* Intentos+1 permitidos antes de mostrar captcha */
 
 			/* Si se superan los 3 intentos, destruir la sesión y volver al paso 1 */
 
-			if($intentos > 3 )
+			if($intentos > 3)
 			{
 				$this->log->add(array('IPAddress' => $this->ip,
 				                      'Timestamp' => date('Y-m-d G:i:s'), 
-						              'Status'    => 1));
+				                      'Status'    => 1));
 
 				$this->session->sess_destroy();
 
 				$this->load->view('login_stepone_view', 
-					              array('message' => 'Codigo expirado'));
+				                  array('message' => 'Código expirado'));
 				return;
 			}
 
-			/* Validacion del formulario de código */				
+			/* Validación del formulario de código */				
 
 			$this->form_validation->set_rules('code', 'code', 'required|trim|exact_length[6]|xss_clean');
 
@@ -140,7 +142,7 @@ const ATTEMPS = 2;   /* Intentos+1 permitidos antes de mostrar captcha */
 				{
 					$this->log->add(array('IPAddress' => $this->ip,
 					                      'Timestamp' => date('Y-m-d G:i:s'), 
-						                  'Status'    => 2));
+					                      'Status'    => 2));
 
 					$this->session->set_userdata('access', TRUE);
 					redirect(base_url('index.php/home'));
@@ -148,11 +150,11 @@ const ATTEMPS = 2;   /* Intentos+1 permitidos antes de mostrar captcha */
 				else 
 				{
 					$this->load->view('login_steptwo_view', 
-						              array('message' => '¡Codigo incorrecto!'));
+						              array('message' => '¡Código incorrecto!'));
 				}
 			}
 
-			/* Fallo la validación de formularios */
+			/* Falló la validación de formularios */
 
 			else $this->load->view('login_steptwo_view');
 		}
@@ -162,15 +164,15 @@ const ATTEMPS = 2;   /* Intentos+1 permitidos antes de mostrar captcha */
 		else redirect(base_url('/'));
 	}
 
-	public function captcha($str='')
+	public function captcha()
 	{
 		require_once('application/libraries/recaptcha/recaptchalib.php');
 		require_once('application/config/captcha.php');
   		
   		$resp = recaptcha_check_answer ($privatekey,
-                                $this->input->ip_address(),
-                                $this->input->post('recaptcha_challenge_field'),
-                                $this->input->post('recaptcha_response_field'));
+		                                $this->input->ip_address(),
+		                                $this->input->post('recaptcha_challenge_field'),
+		                                $this->input->post('recaptcha_response_field'));
 		
 		if (!$resp->is_valid) 
 		{
@@ -209,7 +211,7 @@ const ATTEMPS = 2;   /* Intentos+1 permitidos antes de mostrar captcha */
 		}
 		catch(exception $e)
 		{
-			return 'Error en la conexion a Whatsapp';
+			return 'Error en la conexión a WhatsApp';
 		}
 	}
 

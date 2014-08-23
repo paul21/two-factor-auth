@@ -67,7 +67,7 @@
 					'name'        => 'phone',
 					'class'	      => 'form-control',
 					'maxlength'   => '80',
-					'placeholder' => 'Numero WhatsApp (ej. 5492615123456)',
+					'placeholder' => 'Número WhatsApp (ej. 5492615123456)',
 					'value'       => set_value('phone'),
 					);
 
@@ -89,7 +89,7 @@
 				echo form_submit('send', 'Registrar', 'class = "btn btn-warning"');
 				echo form_close();
 
-				/* Mostrar errores de validacion */
+				/* Mostrar errores de validación */
 
 				echo validation_errors();
 
@@ -101,6 +101,7 @@
 				}
 			}
 			?>
+			
 		</div>
 
 		<div class="footer">

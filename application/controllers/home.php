@@ -10,7 +10,7 @@
             $usuario = $this->session->userdata('usuario');
             $this->load->model('usuario');
             $this->load->view('home_view', 
-                               array('usuario' => $this->usuario->get($usuario))
+                               array('usuario' => $this->usuario->get_by_id($usuario))
                              );
         }
         else redirect(base_url('/'));

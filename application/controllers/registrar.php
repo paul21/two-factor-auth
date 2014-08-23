@@ -9,7 +9,7 @@ class Registrar extends CI_Controller {
 
 	public function go()
 	{
-		/* Validacion de formularios */
+		/* Validación de formularios */
 
 		$this->load->library('form_validation');
 
@@ -33,10 +33,10 @@ class Registrar extends CI_Controller {
 			if($this->usuario->check_username($data['User']))
 			{
 				$this->load->view('registrar_view', 
-					              array('message' => 'Nombre de usuario existente'));
+				                  array('message' => 'Nombre de usuario existente'));
 			}
 
-			/* Intentar la registracion y cargar la vista correspondiente */
+			/* Intentar la registración y cargar la vista correspondiente */
 
 			else
 			{
@@ -45,18 +45,17 @@ class Registrar extends CI_Controller {
 				if($query)
 				{ 
 					$this->load->view('login_stepone_view', 
-						               array('message' => '¡Se ha registrado correctamente!'));
+					                   array('message' => '¡Se ha registrado correctamente!'));
 				}
 				else
 				{			
 					$this->load->view('registrar_view', 
-						              array('message' => 'Se ha producido un error'));
+					                  array('message' => 'Se ha producido un error'));
 				}
 			}
-
 		}
 
-		/* Fallo la validacion de formularios */
+		/* Fallo la validación de formularios */
 
 		else $this->load->view('registrar_view');
 	}

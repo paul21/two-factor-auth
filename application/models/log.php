@@ -1,7 +1,6 @@
-<?php
+<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
  class Log extends CI_Model {
-
 
     function __construct()
     {
@@ -10,7 +9,16 @@
 
     function add($log)
     {
-        $this->db->insert('Log', $log);
+        $query = $this->db->insert('Log', $log);
+        
+        if($query == 1)
+        {
+            return TRUE;
+        }
+        else
+        {
+            return FALSE;
+        }  
     }
 
     function attemps($ip, $seconds)
@@ -43,3 +51,6 @@
         }  
     }
 }
+
+/* End of file log.php */
+/* Location: ./application/models/log.php */

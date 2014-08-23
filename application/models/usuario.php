@@ -41,7 +41,7 @@
         }  
     }
 
-    function get($id)
+    function get_by_id($id)
     {
         $this->db->select('IdUsuario, Nombre, User, Telefono');
         $this->db->from('Usuario');
@@ -60,11 +60,11 @@
         }
     }
 
-    function check_username($user)
+    function check_username($username)
     {
         $this->db->select('IdUsuario, Nombre, Telefono');
         $this->db->from('Usuario');
-        $this->db->where('User', $user);
+        $this->db->where('User', $username);
         $this->db->limit(1);
 
         $query = $this->db->get();
@@ -95,5 +95,7 @@
             return FALSE;
         }  
     }
-
 }
+
+/* End of file usuario.php */
+/* Location: ./application/models/usuario.php */
