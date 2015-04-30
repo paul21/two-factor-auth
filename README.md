@@ -1,6 +1,8 @@
 Two-Factor Authentication
 =========================
 
+* **Actualización 04/2015:** Por cambios recientes en el protocolo, la conexión con WhatsApp ha dejado de funcionar hasta la próxima actualización de la librería [WhatsAPI](https://github.com/venomous0x/WhatsAPI) (si es que esto sucede).
+
 Implementación de un proceso de Login seguro mediante autenticación de doble factor vía **WhatsApp** para la cátedra _Comunicación de Redes Seguras (2060)_ de la Facultad de Ingeniería -- Universidad de Mendoza.
 
 Librerías y archivos de configuración
